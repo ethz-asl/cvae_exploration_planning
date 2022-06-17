@@ -40,7 +40,29 @@ If you find this package useful for your research, please consider citing our pa
   
   # Setup
 TODO add all install instructions here and test them.
-
+Download our dataset at [dataset]()
 
 # Examples
-At least some examples of how to use the provided models and stuff.
+TODO: conda environment reproduce.
+
+Add the project folder to the python environment
+
+```
+export PYTHONPATH='/path/to/this/repo'
+```
+cd
+To train the CVAE model:
+
+```
+cd learning/
+python train.py
+```
+
+See `learning/config.yaml` for tunable parameters
+
+To evaluate the learned model, save the model to experiments/models, and
+
+```
+python evaluate.py
+```
+Choose the world, planner, runs in `experiments/config.yaml`.
