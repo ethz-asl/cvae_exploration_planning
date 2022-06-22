@@ -9,6 +9,7 @@
 **Setup**
 
 * [Installation](#Installation)
+* [Data](#Data)
 
 **Examples**
 
@@ -29,10 +30,14 @@ If you find this package useful for your research, please consider citing our pa
   }
   ```
   
-
-# Installation
+# Setup
+## Installation
 
 Complete installation instructions will be provided shortly. Thank you for your patience.
+
+## Data
+
+Data will be made available shortly. Thank you for your patience.
 
 # Examples
 
