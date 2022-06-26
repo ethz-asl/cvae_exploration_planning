@@ -1,12 +1,81 @@
 import torch
-from model_def import ModelNN, GainPredictor, MapEncoder, PoseEncoder
 import torch.nn as nn
+import torch.nn.functional as F
 import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader
 import numpy as np
 from sklearn.model_selection import train_test_split
-import time
 import matplotlib.pyplot as plt
+
+############ NN definition ############
+
+class MapEncoder(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.conv1 = nn.Conv2d(1, 3, 5)
+        self.conv2 = nn.Conv2d(3, 3, 5)
+        self.conv3 = nn.Conv2d(3, 3, 5)
+        self.pool = nn.MaxPool2d(2, 2)
+        self.fc1 = nn.Linear(108, 16)
+        
+    def forward(self, x):
+        x = F.relu(self.conv1(x))
+        x = F.relu(self.conv2(x))
+        x = F.relu(self.conv3(x))
+        x = self.pool(x)
+        x = torch.flatten(x, 1) # flatten all dimensions except batch
+        x = F.relu(self.fc1(x))
+        return x
+
+class PoseEncoder(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.layer_1 = nn.Linear(4, 64) 
+        self.layer_2 = nn.Linear(64, 64)
+        self.layer_out = nn.Linear(64, 16) 
+        
+        self.batchnorm1 = nn.BatchNorm1d(64)
+        self.batchnorm2 = nn.BatchNorm1d(64)
+        
+    def forward(self, x):
+        x = F.relu(self.layer_1(x))
+        x = self.batchnorm1(x)
+        x = F.relu(self.layer_2(x))
+        x = self.batchnorm2(x)
+        x = F.relu(self.layer_out(x))
+        return x
+
+class GainPredictor(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.layer_1 = nn.Linear(32, 128) 
+        self.layer_2 = nn.Linear(128, 64)
+        self.layer_out = nn.Linear(64, 1) 
+        
+        self.batchnorm1 = nn.BatchNorm1d(128)
+        self.batchnorm2 = nn.BatchNorm1d(64)
+        
+    def forward(self, x1, x2):
+        x = torch.cat([x1,x2], dim=1)
+        x = F.relu(self.layer_1(x))
+        x = self.batchnorm1(x)
+        x = F.relu(self.layer_2(x))
+        x = self.batchnorm2(x)
+        x = F.relu(self.layer_out(x))
+        return x
+
+class ModelNN(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.map_encoder = MapEncoder()
+        self.pose_encoder = PoseEncoder()
+        self.gain_predictor = GainPredictor()
+    
+    def forward(self, x1, x2):
+        xmap = self.map_encoder(x1)
+        xpose = self.pose_encoder(x2)
+        out = self.gain_predictor(xmap, xpose)
+        return out
 
 ############ data packing ############
 
@@ -47,42 +116,48 @@ test_loader = DataLoader(test_data)
 ############ model training ############
 
 device = 'cpu'
-# EPOCHS = 300
+EPOCHS = 200
 
-# model = ModelNN()
-# model.to(device)
-# criterion = nn.MSELoss()
-# optimizer = optim.Adam(model.parameters(), lr=1e-4)
+model = ModelNN()
+model.to(device)
+criterion = nn.MSELoss()
+optimizer = optim.Adam(model.parameters(), lr=1e-4)
 
-# model.train()
-# for e in range(1, EPOCHS+1):
-#     epoch_loss = 0
-#     # start = time.time()
-#     for map_batch, pose_batch, y_batch in train_loader:
-#         map_batch, pose_batch, y_batch = map_batch.to(device), pose_batch.to(device), y_batch.to(device)
-#         optimizer.zero_grad()
-        
-#         y_pred = model(map_batch, pose_batch)
+model.train()
 
-#         loss = criterion(y_pred, y_batch.unsqueeze(1))
-#         loss.backward()
+try:
+    for e in range(1, EPOCHS+1):
+        epoch_loss = 0
+        for map_batch, pose_batch, y_batch in train_loader:
+            map_batch, pose_batch, y_batch = map_batch.to(device), pose_batch.to(device), y_batch.to(device)
+            optimizer.zero_grad()
+            
+            y_pred = model(map_batch, pose_batch)
 
-#         optimizer.step()
-#         epoch_loss += loss.item()
-#     # end = time.time()
-#     # print('time cost = ',end-start,'s')
-#     print(f'Epoch {e+0:03}: | Loss: {epoch_loss/len(train_loader):.5f}')
+            loss = criterion(y_pred, y_batch.unsqueeze(1))
+            loss.backward()
 
-############ model saving ############
+            optimizer.step()
+            epoch_loss += loss.item()
+        print(f'Epoch {e+0:03}: | Loss: {epoch_loss/len(train_loader):.5f}')
+except KeyboardInterrupt:
+    ############ model saving ############
+    torch.save(model.map_encoder, "map_encoder.pt")
+    torch.save(model.pose_encoder, "pose_encoder.pt")
+    torch.save(model.gain_predictor, "gain_predictor.pt")
+    torch.save(model, "cnn_model.pt")
 
-# torch.save(model.map_encoder, "map_encoder.pt")
-# torch.save(model.pose_encoder, "pose_encoder.pt")
-# torch.save(model.gain_predictor, "gain_predictor.pt")
-# torch.save(model, "model.pt")
+torch.save(model, "cnn_model.pt")
 
 ############ model evaluating ############
-model = torch.load("model.pt")
+# model = torch.load("experiments/models/cnn_model.pt")
+# model.eval()
+# cond = map_test[0].reshape(1,1,25,25)
+# pose = pose_test[1].reshape(1,4)
+# y_pred = float(model(torch.FloatTensor(cond), torch.FloatTensor(pose)).reshape(-1))
+# print(y_pred)
 
+print("===== model evaluating =====")
 y_test_pred = []
 model.eval()
 with torch.no_grad():
@@ -102,8 +177,5 @@ plt.text(0,700,"Mean square error of new voxels: "+str(int(mse)))
 plt.xlabel("predicted new voxels")
 plt.ylabel("true new voxels")
 plt.savefig("result.png", dpi=200)
-plt.show()
-
-# print(round(y_test_pred,1))
 print("mse = ",mse)
 

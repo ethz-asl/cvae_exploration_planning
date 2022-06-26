@@ -30,8 +30,6 @@ class PolicyPlanner:
         if self._method == 'twostage_predict_gain' or self._method == 'uniform_predict':
             self.gain_estimator = gain_estimator
         if self._method == 'cnn_uniform_gain_predict' or self._method == 'cnn_gain_predict':
-            # self.map_encoder = gain_estimator[0]
-            # self.pose_encoder = gain_estimator[1]
             self.gain_predictor = gain_estimator
     
 
@@ -255,12 +253,12 @@ class PolicyPlanner:
                 result4cnn[0:2] = result_numpy[0:2]
                 result4cnn[2] = math.cos(result_numpy[2])
                 result4cnn[3] = math.sin(result_numpy[2]) 
-                result4cnn = np.array(result4cnn).reshape(1, 1,-1)
+                result4cnn = result4cnn.reshape(-1, 4)
                 _, is_safe = self._sim.robot.check_move_feasible(result_numpy[0], result_numpy[1])
                 if is_safe:
                     # pose_embed = self.pose_encoder(result4cnn)
-                    new_voxels = np.array(self.gain_predictor(torch.tensor(cond, dtype=torch.double), torch.tensor(result4cnn,dtype=torch.double)))[0]
-                    gain = self._localPlanner.compute_gain(result_numpy[0], result_numpy[1], result_numpy[2], new_voxels[0])
+                    new_voxels = float(self.gain_predictor(torch.FloatTensor(cond), torch.FloatTensor(result4cnn)).reshape(-1))
+                    gain = self._localPlanner.compute_gain(result_numpy[0], result_numpy[1], result_numpy[2], new_voxels)
                     if gain > best_gain:
                         best_gain = gain
                         best_move = [result_numpy[0], result_numpy[1], result_numpy[2]]
@@ -274,8 +272,7 @@ class PolicyPlanner:
         if self._method == "cnn_uniform_gain_predict":
             time_start = time.time()
             cond = self.localmap_downsample()
-            cond = np.array(cond).reshape(1, 25, -1)
-            map_embed = self.map_encoder(cond)
+            cond = np.array(cond).reshape(1, 1, 25, -1)
             while not valid_point_found or counter < self.n_sample:
                 try_counter = try_counter + 1
                 # Sample positions
@@ -286,9 +283,8 @@ class PolicyPlanner:
                     # Sample n_yaw different yaws for every feasible point
                     for i in range(self.n_yaw):
                         yaw = (i + np.random.random()) * 2. * math.pi / self.n_yaw
-                        pose_embed = self.pose_encoder(np.array((x,y,math.cos(yaw),math.sin(yaw))).reshape(1,-1))
-                        new_voxels = np.array(self.gain_predictor(tf.concat([pose_embed, map_embed], axis=1)))[0]
-                        gain = self._localPlanner.compute_gain(x, y, yaw, new_voxels[0])
+                        new_voxels = float(self.gain_predictor(torch.FloatTensor(cond), torch.FloatTensor(np.array([x,y,math.cos(yaw),math.sin(yaw)]).reshape(-1,4))).reshape(-1))
+                        gain = self._localPlanner.compute_gain(x, y, yaw, new_voxels)
                         if not valid_point_found or gain > best_gain:
                             # First found point
                             best_gain = gain
