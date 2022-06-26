@@ -7,7 +7,7 @@
 * [Paper and Video](#Paper-and-Video)
 
 **Setup**
-* [Packages](#Packages)
+<!-- * [Packages](#Packages) -->
 * [Dependencies](#Dependencies)
 * [Installation](#Installation)
 * [Data Repository](#Data-Repository)
@@ -38,31 +38,38 @@ If you find this package useful for your research, please consider citing our pa
   }
   ```
   
-  # Setup
-TODO add all install instructions here and test them.
-Download our dataset at [dataset]()
+# Setup
+## Dependencies
+To start with the repo, we recommend using conda environment.
+``` conda create --name cvae ```
+We conducted our experiments under ```python3.8``` and ```torch 1.7```. Other versions should work as well.
+## Installation
+Add the project folder to the python environment
+```export PYTHONPATH='/path/to/this/repo'```
+Activate the conda environment ```conda activate cvae```, you are ready to go!
+## Data-Repository
+To train the CVAE model (without gain estimation), please download our dataset at [dataset](https://drive.google.com/file/d/1Ajd2gAJa_UCE-f4NIvO_zmI0QkiqJIZA/view?usp=sharing)
+
+To train the CNN based gain predictor, please download our dataset at [dataset](https://drive.google.com/file/d/1c4qaIeliJKw1Dc_3Z1UUwoDGBcF0dKxU/view?usp=sharing)
+
 
 # Examples
-TODO: conda environment reproduce.
 
-Add the project folder to the python environment
-
-```
-export PYTHONPATH='/path/to/this/repo'
-```
-cd
-To train the CVAE model:
+To train the original CVAE model:
 
 ```
-cd learning/
-python train.py
+cd learning & python train.py
 ```
 
-See `learning/config.yaml` for tunable parameters
+See `learning/config.yaml` for tunable parameters.
 
+To train the two-stage model with a CNN based gain estimator:
+```
+cd learning & python train_cnn.py 
+```
 To evaluate the learned model, save the model to experiments/models, and
 
 ```
-python evaluate.py
+cd experiments & python evaluate.py
 ```
 Choose the world, planner, runs in `experiments/config.yaml`.

@@ -7,6 +7,7 @@ worlds:
   ]
 planners:
   [
+    'cnn_gain_predict',
     'cvae',
     'uniform',
     'regression',
@@ -25,6 +26,6 @@ path:
   gain_predict: "models/gain_predict.pt" # cvae including gain estimation
   gain_estimator: "models/gainEstimator.pt" # two stage, seperate gain estimator
   regression: "models/regression.pt"
-  cnn_gain_estimator: ''
+  cnn_gain_estimator: 'models/cnn_model.pt'
 mean: 405.66498
 std: 138.44826

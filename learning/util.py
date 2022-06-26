@@ -2,11 +2,10 @@ from distutils.command.config import config
 import numpy as np
 import torch
 import math
-import learning.configure as cfg
 
-kl_weight = cfg.kl_weight
-x_dim = cfg.x_dim
-local_img_size = cfg.local_img_size
+
+x_dim = 3
+local_img_size = 100
 
 # loss function
 criteriaMSE = torch.nn.MSELoss()
@@ -20,10 +19,10 @@ def criteria(recon_batch, init_batch):
     return loss_yaw + loss_xy
 
 
-# kl divergence
-def regularizer(mu, logvar):
-    # it still returns a vector with dim: (batchsize,)
-    return kl_weight * 2 * torch.sum(torch.exp(logvar) + mu ** 2 - 1 - logvar, 1)
+# # kl divergence
+# def regularizer(mu, logvar):
+#     # it still returns a vector with dim: (batchsize,)
+#     return kl_weight * 2 * torch.sum(torch.exp(logvar) + mu ** 2 - 1 - logvar, 1)
 
 
 # one-hot encoder the data

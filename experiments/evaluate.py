@@ -337,6 +337,12 @@ def setup_policy(sim, local_planner, paths, method, n_samples):
         gain_estimator.eval()
         policy_planner = PolicyPlanner(sim, local_planner, model, method, n_samples, gain_estimator)
     elif method == 'cnn_gain_predict' or method == 'cnn_uniform_gain_predict':
+        model = torch.load(paths['cvae'], map_location=torch.device('cpu'))
+        model.to(torch.device("cpu"))
+        model.eval()
+        cnn_gain_estimator = torch.load(paths['cnn_gain_estimator'], map_location=torch.device('cpu'))
+        cnn_gain_estimator.to(torch.device("cpu"))
+        cnn_gain_estimator.eval()
         # from keras.models import load_model
         # map_encoder = load_model("map_encoder")
         # pose_encoder = load_model("pose_encoder")
@@ -359,6 +365,7 @@ def main():
     # randomly generate maps
     if cfg['explore_world']:
         for file in cfg['worlds']:
+            global world_file
             world_file = 'worlds/' + file
             if not os.path.isdir(world_file+'/'):
                 os.mkdir(world_file+'/')

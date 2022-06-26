@@ -8,7 +8,6 @@ import torch
 import sys
 from threading import local
 from simulator.sim import Simulator
-import learning.util as util
 
 
 class PolicyPlanner:
@@ -27,13 +26,32 @@ class PolicyPlanner:
         self.n_yaw = local_planner.n_yaw
         self.pooling_stride = 5
         self.dim_latent = 3
+        self.local_img_size = 100
         if self._method == 'twostage_predict_gain' or self._method == 'uniform_predict':
             self.gain_estimator = gain_estimator
         if self._method == 'cnn_uniform_gain_predict' or self._method == 'cnn_gain_predict':
-            self.map_encoder = gain_estimator[0]
-            self.pose_encoder = gain_estimator[1]
-            self.gain_predictor = gain_estimator[2]
+            # self.map_encoder = gain_estimator[0]
+            # self.pose_encoder = gain_estimator[1]
+            self.gain_predictor = gain_estimator
     
+
+    def one_hot_encoder_map(self, data):
+        new_data = []
+        for i in range(len(data)):
+            sample = data[i]
+            new_sample = np.zeros(self.local_img_size * 2)
+            encoder1 = np.zeros(self.local_img_size)
+            encoder2 = np.zeros(self.local_img_size)
+            for j in range(self.local_img_size):
+                if sample[j] == 0:  # free
+                    encoder1[j] = 1
+                if sample[j] == 1:  # occupied
+                    encoder2[j] = 1
+                # otherwise: unobserved
+            new_sample[0:self.local_img_size] = encoder1
+            new_sample[self.local_img_size:self.local_img_size * 2] = encoder2
+            new_data.append(new_sample)
+        return new_data
     
     def get_local_condition(self, n_stack=1):
         local_map = self._sim.get_robot_local_submap()
@@ -49,7 +67,7 @@ class PolicyPlanner:
                 else:
                     local_map_zip.append(0)
         local_map_zip = np.array(local_map_zip)
-        local_map_zip = util.one_hot_encoder_map(np.repeat([local_map_zip], n_stack, axis=0))  
+        local_map_zip = self.one_hot_encoder_map(np.repeat([local_map_zip], n_stack, axis=0))  
         cond = torch.tensor(local_map_zip, dtype=self.dtype, device=self.device)
         return cond
     
@@ -225,8 +243,8 @@ class PolicyPlanner:
             time_start = time.time()
             cond_z = self.get_local_condition(1)
             cond = self.localmap_downsample()
-            cond = np.array(cond).reshape(1, 25, -1)
-            map_embed = self.map_encoder(cond)
+            cond = np.array(cond).reshape(1, 1, 25, -1)
+            # map_embed = self.map_encoder(cond)
             while not valid_point_found or counter < self.n_sample:
                 try_counter = try_counter + 1
                 z = torch.randn(1, self.dim_latent)
@@ -237,11 +255,11 @@ class PolicyPlanner:
                 result4cnn[0:2] = result_numpy[0:2]
                 result4cnn[2] = math.cos(result_numpy[2])
                 result4cnn[3] = math.sin(result_numpy[2]) 
-                result4cnn = np.array(result4cnn).reshape(1,-1)
+                result4cnn = np.array(result4cnn).reshape(1, 1,-1)
                 _, is_safe = self._sim.robot.check_move_feasible(result_numpy[0], result_numpy[1])
                 if is_safe:
-                    pose_embed = self.pose_encoder(result4cnn)
-                    new_voxels = np.array(self.gain_predictor(tf.concat([pose_embed, map_embed], axis=1)))[0]
+                    # pose_embed = self.pose_encoder(result4cnn)
+                    new_voxels = np.array(self.gain_predictor(torch.tensor(cond, dtype=torch.double), torch.tensor(result4cnn,dtype=torch.double)))[0]
                     gain = self._localPlanner.compute_gain(result_numpy[0], result_numpy[1], result_numpy[2], new_voxels[0])
                     if gain > best_gain:
                         best_gain = gain

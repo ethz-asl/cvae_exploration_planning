@@ -4,8 +4,6 @@ import torch.optim as optim
 from tensorboardX import SummaryWriter
 import datetime
 import os
-import configure
-import util
 from data import Dataset
 from model import VAE, Encoder, Decoder, CVAE
 import argparse
@@ -16,6 +14,21 @@ try:
     set_start_method('spawn')
 except RuntimeError:
     pass
+
+# kl divergence
+def regularizer(mu, logvar):
+    # it still returns a vector with dim: (batchsize,)
+    return kl_weight * 2 * torch.sum(torch.exp(logvar) + mu ** 2 - 1 - logvar, 1)
+
+criteriaMSE = torch.nn.MSELoss()
+
+
+def criteria(recon_batch, init_batch):
+    loss_xy = criteriaMSE(recon_batch[:, 0:2], init_batch[:, 0:2])
+    yaw_diff = torch.abs(recon_batch[:, 2] - init_batch[:, 2]) # suppose it is within (0,2pi)
+    yaw_diff_adjusted = torch.min(yaw_diff, np.pi*2-yaw_diff)
+    loss_yaw = torch.mean(yaw_diff_adjusted**2)
+    return loss_yaw + loss_xy
 
 
 if __name__ == '__main__':
@@ -74,8 +87,8 @@ if __name__ == '__main__':
                 y_train = local_batch[:, y_dim_start:].type(dtype).to(device)
                 optimizer.zero_grad()
                 mu, logvar, recon_batch = model(x_train, y_train)
-                recon_loss = util.criteria(recon_batch, x_train)
-                kl_loss = util.regularizer(mu, logvar)
+                recon_loss = criteria(recon_batch, x_train)
+                kl_loss = regularizer(mu, logvar)
                 loss = torch.mean(recon_loss + kl_loss, 0)
                 loss.backward()
                 optimizer.step()
@@ -95,8 +108,8 @@ if __name__ == '__main__':
                     x_validate = local_batch[:, 0:x_dim].type(dtype).to(device)
                     y_validate = local_batch[:, y_dim_start:].type(dtype).to(device)
                     mu, logvar, recon_batch = model(x_validate, y_validate)
-                    recon_loss = util.criteria(recon_batch, x_validate)
-                    kl_loss = util.regularizer(mu, logvar)
+                    recon_loss = criteria(recon_batch, x_validate)
+                    kl_loss = regularizer(mu, logvar)
                     loss = torch.mean(recon_loss + kl_loss, 0)
                     recon_loss_viz.append(recon_loss.item())
                     loss_viz.append(loss.item())
