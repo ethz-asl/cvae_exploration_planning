@@ -5,12 +5,14 @@ cvae:
   dim_in: 203
   dim_latent: 3
   dim_hidden: 256
-  data_path: data/CVAE_dataset.npy # absolute path or relative to repo root.
 
 batch_size: 256
 shuffle: True
 num_workers: 2
 
-max_epochs: 2002
+max_epochs: 2000
 kl_weight: 1
+
+data_path: data/CVAE_dataset.npy # absolute path or relative to repo root.
+
 

@@ -8,7 +8,7 @@ from simulator.config import Config
 from simulator.sim import Simulator
 from planning.baseline_planner import LocalSamplingPlanner
 from planning.policy_planner import PolicyPlanner
-from learning.train_cnn import MapEncoder, PoseEncoder, GainPredictor, ModelNN
+from learning.model import MapEncoder, PoseEncoder, CnnGainEstimator, CNNGainEstimatorModel
 
 import pickle
 import math
