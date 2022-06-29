@@ -7,7 +7,6 @@
 * [Paper and Video](#Paper-and-Video)
 
 **Setup**
-<!-- * [Packages](#Packages) -->
 * [Dependencies](#Dependencies)
 * [Installation](#Installation)
 * [Data Repository](#Data-Repository)
@@ -160,6 +159,12 @@ The demo will first display the complete randomly generated world and start pose
 <img src="https://user-images.githubusercontent.com/36043993/176464541-5bd8f644-889e-4a05-b09b-9d34c9290917.png" width="300">
 <img src="https://user-images.githubusercontent.com/36043993/176465166-5239e217-7d16-4f21-9ca5-380d91a68539.png" width="300">
 Randomly generated world (left) and robot moving around (right, orange to red pose arrows).
+
+To generate different world files for experiments, run the world explorer:
+```
+cd experiments
+python explore_worlds.py
+```
 
 # Additional Information
 ## Project Overview
