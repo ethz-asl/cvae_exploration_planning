@@ -60,6 +60,11 @@ We recommend using a virtual environment to run this project. We provide setup i
   conda install pytorch torchvision torchaudio cudatoolkit=$MY_CUDA_VERSION -c pytorch
   ```
 
+* Install other dependencies: 
+  ```bash
+  pip install -r requirements.txt
+  ```
+
 ## Installation
 
 * Setup the destination where to isntall the project:

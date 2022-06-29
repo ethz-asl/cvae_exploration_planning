@@ -8,6 +8,7 @@ import torch
 import sys
 from threading import local
 from simulator.sim import Simulator
+from learning.util import coord_transform
 
 
 class PolicyPlanner:
@@ -100,19 +101,6 @@ class PolicyPlanner:
                 # otherwise: unobserved
             return localMap_onehot
         return localMap_zip
-    
-
-    def coord_transform(self, x_in, y_in, yaw_in):
-        """ 
-        converts input x,y,yaw to polar relative coords.
-        Returns r in [0, sqrt(2)/2*LocalMapSize], theta, psi in [-pi, pi]
-        """
-        r = (x_in ** 2 + y_in ** 2) ** 0.5
-        theta = np.arctan2(y_in, x_in)
-        psi = yaw_in - theta
-        if psi >= 2.0 * math.pi:
-            psi = psi - 2.0 * math.pi
-        return r, theta, psi
 
 
     def plan(self):
@@ -197,7 +185,7 @@ class PolicyPlanner:
                 z_in = torch.cat((z, cond), 1)
                 result = self.model.decoder(z_in)
                 result_numpy = result.detach().numpy().astype("float64")[0]
-                transferred_result = torch.tensor(np.array(self.coord_transform(result_numpy[0], result_numpy[1], result_numpy[2])), dtype=torch.float).reshape(1,-1)
+                transferred_result = torch.tensor(np.array(coord_transform(result_numpy[0], result_numpy[1], result_numpy[2])), dtype=torch.float).reshape(1,-1)
                 _, is_safe = self._sim.robot.check_move_feasible(result_numpy[0], result_numpy[1])
                 if is_safe:
                     new_voxels = self.gain_estimator(transferred_result, cond)
@@ -225,7 +213,7 @@ class PolicyPlanner:
                     # Sample n_yaw different yaws for every feasible point
                     for i in range(self.n_yaw):
                         yaw = (i + np.random.random()) * 2. * math.pi / self.n_yaw
-                        new_voxels = self.gain_estimator(torch.tensor(np.array(self.coord_transform(x,y,yaw)), dtype=torch.float).reshape(1, -1), cond)
+                        new_voxels = self.gain_estimator(torch.tensor(np.array(coord_transform(x,y,yaw)), dtype=torch.float).reshape(1, -1), cond)
                         gain = self._localPlanner.compute_gain(x, y, yaw, new_voxels)
                         if not valid_point_found or gain > best_gain:
                             # First found point

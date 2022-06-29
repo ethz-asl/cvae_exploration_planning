@@ -10,28 +10,18 @@ import argparse
 from torch.multiprocessing import set_start_method
 import yaml
 import sys
+from util import criteria, kl_regularizer
 
 try:
     set_start_method('spawn')
 except RuntimeError:
     pass
 
-# kl divergence
-def regularizer(mu, logvar):
-    # it still returns a vector with dim: (batchsize,)
-    return kl_weight * 2 * torch.sum(torch.exp(logvar) + mu ** 2 - 1 - logvar, 1)
-
 criteriaMSE = torch.nn.MSELoss()
 REPOSITORY_ROOT= os.path.abspath(os.path.join(__file__, os.path.pardir, os.pardir))
 
-def criteria(recon_batch, init_batch):
-    loss_xy = criteriaMSE(recon_batch[:, 0:2], init_batch[:, 0:2])
-    yaw_diff = torch.abs(recon_batch[:, 2] - init_batch[:, 2]) # suppose it is within (0,2pi)
-    yaw_diff_adjusted = torch.min(yaw_diff, np.pi*2-yaw_diff)
-    loss_yaw = torch.mean(yaw_diff_adjusted**2)
-    return loss_yaw + loss_xy
-
 def main():
+    print("Setting up CVAE training...")
     with open('config.yaml') as file:
         cfg = yaml.load(file, Loader=yaml.FullLoader)
 
@@ -49,7 +39,7 @@ def main():
     num_workers = cfg['num_workers']
     dtype = torch.float32
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    data_path = cfg['data_path']
+    data_path = cfg['cvae']['data_path']
 
     params = {'batch_size': batch_size,
               'shuffle': shuffle,
@@ -94,7 +84,7 @@ def main():
                 optimizer.zero_grad()
                 mu, logvar, recon_batch = model(x_train, y_train)
                 recon_loss = criteria(recon_batch, x_train)
-                kl_loss = regularizer(mu, logvar)
+                kl_loss = kl_regularizer(mu, logvar,kl_weight)
                 loss = torch.mean(recon_loss + kl_loss, 0)
                 loss.backward()
                 optimizer.step()
@@ -111,7 +101,7 @@ def main():
                     y_validate = local_batch[:, y_dim_start:].type(dtype).to(device)
                     mu, logvar, recon_batch = model(x_validate, y_validate)
                     recon_loss = criteria(recon_batch, x_validate)
-                    kl_loss = regularizer(mu, logvar)
+                    kl_loss = kl_regularizer(mu, logvar, kl_weight)
                     loss = torch.mean(recon_loss + kl_loss, 0)
                     recon_loss_viz.append(recon_loss.item())
                     loss_viz.append(loss.item())

@@ -4,29 +4,24 @@ import torch
 import math
 
 
-x_dim = 3
-local_img_size = 100
-
-# loss function
-criteriaMSE = torch.nn.MSELoss()
-
+# x_dim = 3
+# local_img_size = 100
 
 def criteria(recon_batch, init_batch):
-    loss_xy = criteriaMSE(recon_batch[:, 0:2], init_batch[:, 0:2])
+    """ Compute loss function for position and orientation. """
+    loss_xy = torch.nn.MSELoss(recon_batch[:, 0:2], init_batch[:, 0:2])
     yaw_diff = torch.abs(recon_batch[:, 2] - init_batch[:, 2]) # suppose it is within (0,2pi)
     yaw_diff_adjusted = torch.min(yaw_diff, np.pi*2-yaw_diff)
     loss_yaw = torch.mean(yaw_diff_adjusted**2)
     return loss_yaw + loss_xy
 
-
-# # kl divergence
-# def regularizer(mu, logvar):
-#     # it still returns a vector with dim: (batchsize,)
-#     return kl_weight * 2 * torch.sum(torch.exp(logvar) + mu ** 2 - 1 - logvar, 1)
-
+def kl_regularizer(mu, logvar, kl_weight):
+    """ KL Divergence regularizer """
+    # it still returns a vector with dim: (batchsize,)
+    return kl_weight * 2 * torch.sum(torch.exp(logvar) + mu ** 2 - 1 - logvar, 1)
 
 # one-hot encoder the data
-def one_hot_encoder(data):
+def one_hot_encoder(data, x_dim, local_img_size):
     new_data = []
     for i in range(len(data)):
         sample = data[i]
@@ -46,7 +41,7 @@ def one_hot_encoder(data):
     return new_data
 
 
-def one_hot_encoder_map(data):
+def one_hot_encoder_map(data, local_img_size):
     new_data = []
     for i in range(len(data)):
         sample = data[i]
