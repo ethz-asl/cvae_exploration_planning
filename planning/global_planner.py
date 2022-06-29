@@ -3,9 +3,9 @@ import random
 import math
 from scipy import ndimage
 
-from simulator.config import Config
-from simulator.robot import Robot
-from planning.rrt_star import RRTStar
+from cvae_exploration_planning.simulator.config import Config
+from cvae_exploration_planning.simulator.robot import Robot
+from cvae_exploration_planning.planning.rrt_star import RRTStar
 
 
 class GlobalPlanner:

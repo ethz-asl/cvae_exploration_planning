@@ -141,14 +141,24 @@ See `learning/config_cnn.yaml` for tunable parameters.
 ## Evaluating a Planner
 To evaluate the learned model, save the model to experiments/models, and
 ```
-cd experiments & python evaluate.py
+cd experiments
+python evaluate.py
 ```
 Choose the world, planner, runs in `experiments/config.yaml`.
 
 ## Using the simulator
-The simulator used to generate data and evaluate the approaches is a fully functional 2D exploration simulator. We provide a demo showcasing how some of the main features of the simulator can be used and visualized.
+The simulator used to generate data and evaluate the approaches is a fully functional 2D exploration simulator. We provide a demo showcasing how some of the main features of the simulator can be used and visualized. Start the demo by running:
 
+```
+cd simulator
+python demo.py
+```
 
+The demo will first display the complete randomly generated world and start pose. Then enter '1' in the terminal to let the robot explore the simulated world using a bseline planner. If it gets stuck in a local minimum a global planner will reset it.
+
+<img src="https://user-images.githubusercontent.com/36043993/176464541-5bd8f644-889e-4a05-b09b-9d34c9290917.png" width="300">
+<img src="https://user-images.githubusercontent.com/36043993/176465166-5239e217-7d16-4f21-9ca5-380d91a68539.png" width="300">
+Randomly generated world (left) and robot moving around (right, orange to red pose arrows).
 
 # Additional Information
 ## Project Overview

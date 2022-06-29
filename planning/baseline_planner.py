@@ -1,9 +1,9 @@
 import time
-
-from simulator.robot import Robot
 import random
 import numpy as np
 import math
+
+from cvae_exploration_planning.simulator.robot import Robot
 
 """ This file contains some baseline sampling based planners to compare against """
 

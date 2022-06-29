@@ -1,10 +1,10 @@
 import time
-
-from simulator.robot import Robot
-from planning.baseline_planner import LocalSamplingPlanner
 import random
 import numpy as np
 import math
+
+from cvae_exploration_planning.simulator.robot import Robot
+from cvae_exploration_planning.planning.baseline_planner import LocalSamplingPlanner
 
 """ 
 This file contains an implementation of the RH-NBVP [1] as baseline to compare against.

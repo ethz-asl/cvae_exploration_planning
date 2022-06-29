@@ -3,8 +3,9 @@ import time
 import random
 import numpy as np
 import torch
-from simulator.simulator import Simulator
-from learning.util import coord_transform, one_hot_encoder_map
+
+from cvae_exploration_planning.simulator.simulator import Simulator
+from cvae_exploration_planning.learning.util import coord_transform, one_hot_encoder_map
 
 
 class PolicyPlanner:
