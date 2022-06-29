@@ -81,11 +81,27 @@ We recommend using a virtual environment to run this project. We provide setup i
 
 ## Data-Repository
 
-All our data is available on the [ETHZ ASL Dataserver].
-To train the CVAE model (without gain estimation), please download our dataset at [dataset](https://drive.google.com/file/d/1Ajd2gAJa_UCE-f4NIvO_zmI0QkiqJIZA/view?usp=sharing)
-
-To train the CNN based gain predictor, please download our dataset at [dataset](https://drive.google.com/file/d/1c4qaIeliJKw1Dc_3Z1UUwoDGBcF0dKxU/view?usp=sharing)
-
+All our data is available on the [ETHZ ASL Dataserver](https://projects.asl.ethz.ch/datasets/doku.php?id=cvae_exploration_planning).
+You can download all files needed to train and run our models and planners easily:
+* Setup a data folder (this path is used by default):
+  ```
+  cd $MY_CVAE_ROOT/cvae_exploration_planning
+  mkdir data
+  ```
+* Download the data used to train the CVAE models: 
+  ```
+  wget http://robotics.ethz.ch/~asl-datasets/2022_CVAE_Exploration_Planning/CVAE_dataset.npy -P data
+  ```
+* Download the data used to train the CNN models: 
+  ```
+  wget http://robotics.ethz.ch/~asl-datasets/2022_CVAE_Exploration_Planning/CNN_dataset.npy -P data
+  ```
+* Download the worlds used in our experiments: 
+  ```
+  wget http://robotics.ethz.ch/~asl-datasets/2022_CVAE_Exploration_Planning/test_worlds.zip
+  unzip test_worlds.zip -d experiments/worlds
+  rm test_worlds.zip
+  ```
 
 # Examples
 
