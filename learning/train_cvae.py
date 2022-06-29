@@ -19,6 +19,8 @@ except RuntimeError:
 REPOSITORY_ROOT = os.path.abspath(
     os.path.join(__file__, os.path.pardir, os.pardir))
 
+    
+
 
 def main():
     print("Setting up CVAE training...")

@@ -1,4 +1,3 @@
-from distutils.command.config import config
 import numpy as np
 import torch
 import math
@@ -6,7 +5,8 @@ import math
 
 def criteria(recon_batch, init_batch):
     """ Compute loss function for position and orientation. """
-    loss_xy = torch.nn.MSELoss(recon_batch[:, 0:2], init_batch[:, 0:2])
+    loss_function = torch.nn.MSELoss()
+    loss_xy = loss_function(recon_batch[:, 0:2], init_batch[:, 0:2])
     yaw_diff = torch.abs(recon_batch[:, 2] - init_batch[:, 2]) # suppose it is within (0,2pi)
     yaw_diff_adjusted = torch.min(yaw_diff, np.pi*2-yaw_diff)
     loss_yaw = torch.mean(yaw_diff_adjusted**2)
