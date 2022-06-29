@@ -88,7 +88,7 @@ We recommend using a virtual environment to run this project. We provide setup i
 
 * You are now ready to go!
 
-## Data-Repository
+## Data Repository
 
 All our data is available on the [ETHZ ASL Dataserver](https://projects.asl.ethz.ch/datasets/doku.php?id=cvae_exploration_planning).
 You can download all files needed to train and run our models and planners easily:
@@ -115,24 +115,28 @@ You can download all files needed to train and run our models and planners easil
 # Examples
 
 ## Training the CVAE model
-To train the original CVAE model run:
+To train the original CVAE model, make sure you [downloaded the CVAE dataset](Data-Repository), then run:
 
 ```
 cd learning 
 python train_cvae.py
 ```
 
-See `learning/config.yaml` for tunable parameters.
+The model will start training, and periodically save the intermediate model in `learning/policies/<start_time>` and training information in `learning/runs/<start_time>`.
+
+See `learning/config_cvae.yaml` for tunable parameters.
 
 ## Training the CNN model
 
-To train the two-stage model with a CNN based gain estimator run:
+To train the CNN based gain estimator of the two-stage model, make sure you [downloaded the CNN dataset](Data-Repository), then run:
 ```
 cd learning 
 python train_cnn.py 
 ```
 
-See `learning/config.yaml` for tunable parameters.
+The model will start training and write intermediate and final models as well as a performance evaluation to `learning/runs/<start_time>`.
+
+See `learning/config_cnn.yaml` for tunable parameters.
 
 ## Evaluating a Planner
 To evaluate the learned model, save the model to experiments/models, and

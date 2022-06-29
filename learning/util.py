@@ -4,9 +4,6 @@ import torch
 import math
 
 
-# x_dim = 3
-# local_img_size = 100
-
 def criteria(recon_batch, init_batch):
     """ Compute loss function for position and orientation. """
     loss_xy = torch.nn.MSELoss(recon_batch[:, 0:2], init_batch[:, 0:2])

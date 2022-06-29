@@ -1,2 +1,4 @@
 tensorboardX
 pyyaml
+matplotlib
+sklearn
