@@ -5,7 +5,7 @@ import time
 import datetime
 from planning.baseline_nbvp import LocalNBVPlanner
 from simulator.config import Config
-from simulator.sim import Simulator
+from simulator.simulator import Simulator
 from planning.baseline_planner import LocalSamplingPlanner
 from planning.policy_planner import PolicyPlanner
 from learning.model import MapEncoder, PoseEncoder, CnnGainEstimator, CNNGainEstimatorModel

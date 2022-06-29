@@ -5,7 +5,7 @@ import matplotlib
 from matplotlib import pyplot as plt
 from matplotlib.patches import Arrow, Wedge, Circle
 from matplotlib.colors import ListedColormap
-from simulator.config import Config
+from cvae_exploration_planning.simulator.config import Config
 
 
 class Robot:

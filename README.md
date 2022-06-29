@@ -83,7 +83,7 @@ We recommend using a virtual environment to run this project. We provide setup i
 
 * Add the project folder to your python path:
   ```bash
-  export PYTHONPATH=$MY_CVAE_ROOT
+  export PYTHONPATH="${MY_CVAE_ROOT}/:${PYTHONPATH}"
   ```
 
 * You are now ready to go!
@@ -144,6 +144,11 @@ To evaluate the learned model, save the model to experiments/models, and
 cd experiments & python evaluate.py
 ```
 Choose the world, planner, runs in `experiments/config.yaml`.
+
+## Using the simulator
+The simulator used to generate data and evaluate the approaches is a fully functional 2D exploration simulator. We provide a demo showcasing how some of the main features of the simulator can be used and visualized.
+
+
 
 # Additional Information
 ## Project Overview

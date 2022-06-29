@@ -3,7 +3,7 @@ import time
 import random
 import numpy as np
 import torch
-from simulator.sim import Simulator
+from simulator.simulator import Simulator
 from learning.util import coord_transform, one_hot_encoder_map
 
 

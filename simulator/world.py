@@ -3,7 +3,7 @@ import math
 import warnings
 import random
 
-from simulator.config import Config
+from cvae_exploration_planning.simulator.config import Config
 
 
 class World:
