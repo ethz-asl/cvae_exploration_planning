@@ -56,3 +56,7 @@ CATKIN_IGNORE
 
 # Local utilities
 Notes.txt
+
+# Data and output directories.
+data/
+outputs/

@@ -16,7 +16,6 @@
 * [Configuring a Planner](#Configuring-a-Planner)
 * [Run an Experiment](#Run-an-Experiment)
 
-For additional information please see the [wiki](https://github.com/ethz-asl/mav_active_3d_planning/wiki).
 
 # Credits
 ## Paper and Video
@@ -39,15 +38,50 @@ If you find this package useful for your research, please consider citing our pa
   ```
   
 # Setup
+We recommend using a virtual environment to run this project. We provide setup instructions using [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html) on Ubuntu.
+
+**Note on versioning:** This repository was developed and tested using `Ubuntu 20.04` with `Python 3.8` and `Torch 1.7`. Other versions should also work.
+
 ## Dependencies
-To start with the repo, we recommend using conda environment.
-``` conda create --name cvae ```
-We conducted our experiments under ```python3.8``` and ```torch 1.7```. Other versions should work as well.
+
+* Install [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html) and setup a virtual environment: 
+  ```bash 
+  conda create --name cvae 
+  conda activate cvae
+  ```
+
+* Use conda to install [PyTorch](https://pytorch.org/) for your [cuda version](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html): 
+  ```bash
+  export MY_CUDA_VERSION='11.6' # Replace with your version. 
+  conda install pytorch torchvision torchaudio cudatoolkit=$MY_CUDA_VERSION -c pytorch
+  ```
+
 ## Installation
-Add the project folder to the python environment
-```export PYTHONPATH='/path/to/this/repo'```
-Activate the conda environment ```conda activate cvae```, you are ready to go!
+
+* Setup the destination where to isntall the project:
+  ```bash
+  export MY_CVAE_ROOT='/home/$USER/cvae_exploration_workspace' # Replace with your path.
+  makedir -p $MY_CVAE_ROOT
+  cd $MY_CVAE_ROOT
+  ```
+
+* Download the repository, we recommend using [SSH Keys](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#about-ssh-key-generation) or alternatively via HTTPS:
+  ```bash
+  git clone git@github.com:ethz-asl/cvae_exploration_planning.git # SSH
+  git clone https://github.com/ethz-asl/cvae_exploration_planning.git # HTTPS
+  cd cvae_exploration_planning
+  ```
+
+* Add the project folder to your python path:
+  ```bash
+  export PYTHONPATH=$MY_CVAE_ROOT
+  ```
+
+* You are now ready to go!
+
 ## Data-Repository
+
+All our data is available on the [ETHZ ASL Dataserver].
 To train the CVAE model (without gain estimation), please download our dataset at [dataset](https://drive.google.com/file/d/1Ajd2gAJa_UCE-f4NIvO_zmI0QkiqJIZA/view?usp=sharing)
 
 To train the CNN based gain predictor, please download our dataset at [dataset](https://drive.google.com/file/d/1c4qaIeliJKw1Dc_3Z1UUwoDGBcF0dKxU/view?usp=sharing)
