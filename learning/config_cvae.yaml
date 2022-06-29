@@ -1,5 +1,5 @@
 cvae:
-  x_dim: 3
+  x_dim: 3  # 3: regular CVAE, 4: CVAE+GJ (4th entry is the gain)
   y_dim: 200
   y_dim_start: 4
   dim_in: 203
