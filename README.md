@@ -99,7 +99,7 @@ You can download all files needed to train and run our models and planners easil
 * Download the worlds used in our experiments: 
   ```
   wget http://robotics.ethz.ch/~asl-datasets/2022_CVAE_Exploration_Planning/test_worlds.zip
-  unzip test_worlds.zip -d experiments/worlds
+  unzip -j test_worlds.zip -d experiments/worlds
   rm test_worlds.zip
   ```
 
