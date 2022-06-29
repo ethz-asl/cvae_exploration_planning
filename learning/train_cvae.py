@@ -9,6 +9,7 @@ from model import VAE, Encoder, Decoder, CVAE
 import argparse
 from torch.multiprocessing import set_start_method
 import yaml
+import sys
 
 try:
     set_start_method('spawn')
@@ -21,7 +22,7 @@ def regularizer(mu, logvar):
     return kl_weight * 2 * torch.sum(torch.exp(logvar) + mu ** 2 - 1 - logvar, 1)
 
 criteriaMSE = torch.nn.MSELoss()
-
+REPOSITORY_ROOT= os.path.abspath(os.path.join(__file__, os.path.pardir, os.pardir))
 
 def criteria(recon_batch, init_batch):
     loss_xy = criteriaMSE(recon_batch[:, 0:2], init_batch[:, 0:2])
@@ -30,13 +31,11 @@ def criteria(recon_batch, init_batch):
     loss_yaw = torch.mean(yaw_diff_adjusted**2)
     return loss_yaw + loss_xy
 
-
-if __name__ == '__main__':
-    
+def main():
     with open('config.yaml') as file:
         cfg = yaml.load(file, Loader=yaml.FullLoader)
 
-    # parameters 
+    # Training parameters. 
     x_dim = cfg['cvae']['x_dim']
     y_dim_start = cfg['cvae']['y_dim_start']
     y_dim = cfg['cvae']['y_dim']
@@ -50,13 +49,20 @@ if __name__ == '__main__':
     num_workers = cfg['num_workers']
     dtype = torch.float32
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    data_path = cfg['data_path']
 
     params = {'batch_size': batch_size,
               'shuffle': shuffle,
               'num_workers': num_workers}
     
-    # Datasets
-    data = np.load('data_random.npy') 
+    # Load the dataset.
+    if not data_path.startswith('/'):
+        data_path = os.path.join(REPOSITORY_ROOT, data_path)
+
+    if not os.path.isfile(data_path):
+        print(f"Dataset file '{data_path}' does not exist!")
+        sys.exit(1)
+    data = np.load(data_path) 
     
     data_training = data[0:int(0.8 * len(data))]
     data_validation = data[int(0.8 * len(data)):]
@@ -95,11 +101,7 @@ if __name__ == '__main__':
                 epoch_loss.append(loss.item()) # get loss.value
                 recon_loss_train.append(recon_loss.item())
             writer.add_scalar('training/loss', np.mean(np.array(epoch_loss)), epoch)
-            print("epoch: {}, Loss: {}, Recon_loss:{}, weight * KL_loss:{}".format(epoch,
-                                                                                   np.mean((np.array(epoch_loss))),
-                                                                                   np.mean(np.array(recon_loss_train)),
-                                                                                   np.mean((np.array(epoch_loss))) -
-                                                                                   np.mean(np.array(recon_loss_train))))
+            print("epoch: {}, Loss: {}, Recon_loss:{}, weight * KL_loss:{}".format(epoch, np.mean((np.array(epoch_loss))), np.mean(np.array(recon_loss_train)), np.mean((np.array(epoch_loss))) - np.mean(np.array(recon_loss_train))))
             # validation
             if epoch % 100 == 0 and epoch > 0:
                 model.eval()
@@ -117,10 +119,7 @@ if __name__ == '__main__':
                 writer.add_scalar('validation/recon_loss', np.mean(np.array(recon_loss_viz)), epoch)
                 writer.add_scalar('validation/weighted_kl_loss', np.mean((np.array(kl_loss_viz))), epoch)
                 writer.add_scalar('validation/loss', np.mean((np.array(loss_viz))), epoch)
-                print("epoch: {}, Loss: {}, Recon_loss: {}, weight * KL_loss: {}".format(epoch,
-                                                                                np.mean((np.array(loss_viz))),
-                                                                                np.mean(np.array(recon_loss_viz)),
-                                                                                np.mean((np.array(kl_loss_viz)))))
+                print("epoch: {}, Loss: {}, Recon_loss: {}, weight * KL_loss: {}".format(epoch, np.mean((np.array(loss_viz))), np.mean(np.array(recon_loss_viz)), np.mean((np.array(kl_loss_viz)))))
                 model.train()
                 
             # save intermediate model
@@ -140,3 +139,7 @@ if __name__ == '__main__':
         torch.save(model, f=save_path)
 
     writer.close()
+
+
+if __name__ == '__main__':
+    main()

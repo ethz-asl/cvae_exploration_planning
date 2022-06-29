@@ -6,7 +6,6 @@ from matplotlib import pyplot as plt
 from matplotlib.patches import Arrow, Wedge, Circle
 from matplotlib.colors import ListedColormap
 from simulator.config import Config
-from scipy import ndimage
 
 
 class Robot:

@@ -5,6 +5,7 @@ import warnings
 
 
 class Config:
+    # Static type definitions
     world_type_cubes_and_spheres = 0
     world_type_maze = 1
     collision_behavior_skip = 0     # Does not do anything if path would collide
@@ -21,7 +22,7 @@ class Config:
 
         # world population
         self.world_type = Config.world_type_cubes_and_spheres
-        # cubes_and_spheres
+        # cubes and spheres
         self.cs_n_cubes = [10, 40]  # min, max
         self.cs_n_spheres = [10, 40]
         self.cs_cube_side_lengths = [1, 10]  # m

@@ -13,8 +13,12 @@
 * [Data Repository](#Data-Repository)
 
 **Examples**
-* [Configuring a Planner](#Configuring-a-Planner)
-* [Run an Experiment](#Run-an-Experiment)
+* [Training the CVAE Model](#Training-the-CVAE-Model)
+* [Training the CNN Model](#Training-the-CNN-Model)
+* [Evaluating a Planner](#Evaluating-a-Planner)
+
+**Additional Information**
+* [Project Overview](#Project-Overview)
 
 
 # Credits
@@ -105,21 +109,32 @@ You can download all files needed to train and run our models and planners easil
 
 # Examples
 
-To train the original CVAE model:
+## Training the CVAE model
+To train the original CVAE model run:
 
 ```
-cd learning & python train.py
+cd learning 
+python train_cvae.py
 ```
 
 See `learning/config.yaml` for tunable parameters.
 
-To train the two-stage model with a CNN based gain estimator:
-```
-cd learning & python train_cnn.py 
-```
-To evaluate the learned model, save the model to experiments/models, and
+## Training the CNN model
 
+To train the two-stage model with a CNN based gain estimator run:
+```
+cd learning 
+python train_cnn.py 
+```
+
+See `learning/config.yaml` for tunable parameters.
+
+## Evaluating a Planner
+To evaluate the learned model, save the model to experiments/models, and
 ```
 cd experiments & python evaluate.py
 ```
 Choose the world, planner, runs in `experiments/config.yaml`.
+
+# Additional Information
+## Project Overview

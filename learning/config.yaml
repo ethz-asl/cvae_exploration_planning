@@ -12,3 +12,5 @@ num_workers: 2
 
 max_epochs: 2002
 kl_weight: 1
+
+data_path: data/CVAE_dataset.npy # absolute path or relative to repo root.
