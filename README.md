@@ -124,7 +124,7 @@ python train_cvae.py
 
 The model will start training, and periodically save the intermediate model in `learning/policies/<start_time>` and training information in `learning/runs/<start_time>`.
 
-See `learning/config_cvae.yaml` for tunable parameters.
+See `learning/config_cvae.yaml` for tunable parameters. For example, to jointly train the gain estimator, set `x_dim` to 4 and the last dimension of the network output would be the predicted gain. 
 
 ## Training the CNN model
 
