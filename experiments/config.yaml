@@ -3,16 +3,15 @@ maze: True
 cube: False
 worlds: 
   [
-    'maze_50',
+    'demo_maze',
   ]
 planners:
   [
-    'cnn_gain_predict',
     'cvae',
     'uniform',
     'regression',
     'nbvp',
-    'predict_gain',
+    'cvae_joint',
     'twostage_predict_gain',
     'cnn_gain_predict',
     'cnn_uniform_gain_predict',
@@ -23,9 +22,9 @@ plot: False
 regression: False
 path:
   cvae: "models/cvae.pt"
-  gain_predict: "models/gain_predict.pt" # cvae including gain estimation
-  gain_estimator: "models/gainEstimator.pt" # two stage, seperate gain estimator
+  cvae_joint: "models/cvae_joint.pt" # cvae including gain estimation
+  gain_estimator: "models/gain_estimator.pt" # two stage, seperate gain estimator
   regression: "models/regression.pt"
-  cnn_gain_estimator: 'models/cnn_model.pt'
+  cnn_gain_estimator: 'models/cnn_gain_estimator.pt'
 mean: 405.66498
 std: 138.44826

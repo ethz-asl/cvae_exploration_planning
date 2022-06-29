@@ -1,5 +1,5 @@
 # cvae_exploration_planning
-**CVAE Exploration Planning** is a package providing an open-source implementation of the simulator, networks, and planners presented in our paper. TODO.
+**CVAE Exploration Planning** is a package providing an open-source implementation of the simulator, networks, and planners presented in our paper on learning sampling-based local exploration.
 
 
 # Table of Contents
@@ -16,6 +16,7 @@
 * [Training the CVAE Model](#Training-the-CVAE-Model)
 * [Training the CNN Model](#Training-the-CNN-Model)
 * [Evaluating a Planner](#Evaluating-a-Planner)
+* [Using the simulator](#Using-the-simulator)
 
 **Additional Information**
 * [Project Overview](#Project-Overview)
