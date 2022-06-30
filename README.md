@@ -144,7 +144,9 @@ python evaluate.py
 
 This will run the planners in the simulator for all specified experiments and store the results in `epxeriments/results/<start_time>`. Afterwards the stored data is evaluated and exploration progress curves are plotted.
 
-![Simulator](https://user-images.githubusercontent.com/36043993/176603370-3dd3727d-7f65-4e35-80ba-f8419fd58516.png)
+![Example_performance](https://user-images.githubusercontent.com/36043993/176662115-fb589d43-242c-4712-8308-962a0d98dae2.png)
+Example performance on the demo_maze for N=5.
+
 
 ## Using the simulator
 The simulator used to generate data and evaluate the approaches is a fully functional 2D exploration simulator. We provide a demo showcasing how some of the main features of the simulator can be used and visualized. Start the demo by running:
