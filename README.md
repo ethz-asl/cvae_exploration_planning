@@ -25,18 +25,14 @@
 ## Paper and Video
 If you find this package useful for your research, please consider citing our paper:
 
-* Lukas Schmid, Chao Ni, Yuliang Zhong, Roland Siegwart, and Olov Andersson, "**Fast and Compute-efficient Sampling-based Local Exploration Planning via Distribution Learning**", in *IEEE Robotics and Automation Letters*, vol. TODO, no. TODO, pp. TODO, June 2022 [IEEE | [ArXiv](https://arxiv.org/abs/2202.13715) | Video]
+* Lukas Schmid, Chao Ni, Yuliang Zhong, Roland Siegwart, and Olov Andersson, "**Fast and Compute-efficient Sampling-based Local Exploration Planning via Distribution Learning**", in *IEEE Robotics and Automation Letters*, June 2022 [IEEE | [ArXiv](https://arxiv.org/abs/2202.13715) | Video]
   ```bibtex
   @ARTICLE{Schmid22Fast,
     author={L. {Schmid} and C. {Ni} and Y. {Zhong} and and R. {Siegwart} and O. {Andersson}},
     journal={IEEE Robotics and Automation Letters},
     title={Fast and Compute-efficient Sampling-based Local Exploration Planning via Distribution Learning},
     year={2022},
-    volume={?},
-    number={?},
-    pages={?},
-    doi={?},
-    ISSN={?},
+    doi={10.1109/LRA.2022.3186511},
     month={June},
   }
   ```
@@ -139,12 +135,16 @@ The model will start training and write intermediate and final models as well as
 See `learning/config_cnn.yaml` for tunable parameters.
 
 ## Evaluating a Planner
-To evaluate the learned model, save the model to experiments/models, and
+We provide a script to run and evaluate any planner. First, set the worlds, planners, numbers of runs, numbers of sampels, and other experiment details in `experiments/config.yaml`. Then conduct the experiments by running:
+
 ```
 cd experiments
 python evaluate.py
 ```
-Choose the world, planner, runs in `experiments/config.yaml`.
+
+This will run the planners in the simulator for all specified experiments and store the results in `epxeriments/results/<start_time>`. Afterwards the stored data is evaluated and exploration progress curves are plotted.
+
+![Simulator](https://user-images.githubusercontent.com/36043993/176603370-3dd3727d-7f65-4e35-80ba-f8419fd58516.png)
 
 ## Using the simulator
 The simulator used to generate data and evaluate the approaches is a fully functional 2D exploration simulator. We provide a demo showcasing how some of the main features of the simulator can be used and visualized. Start the demo by running:
@@ -167,3 +167,38 @@ python explore_worlds.py
 
 # Additional Information
 ## Project Overview
+The files in this repository are structured as follows:
+
+```bash
+├── data  # ---------------- # Local directory for training data.
+│   ├── CNN_dataset.npy      # Provided downloadable data.
+│   └── CVAE_dataset.npy
+├── experiments  # --------- # Package to run experiments.
+│   ├── config.yaml          # Which experiments to run.
+│   ├── evaluate.py          # Run and evaluate planners.
+│   ├── explore_worlds.py    # Interactively create new world files.
+│   ├── models               # Provided pre-trained models.
+│   ├── results              # Local directory for experiment outputs.
+│   └── worlds               # Local directory to store wo
+├── learning  # ------------ # Package to define and train models.
+│   ├── config_cnn.yaml      # Configurations to train CVAE/CNN models.
+│   ├── config_cvae.yaml
+│   ├── data.py              # Data processing tools.
+│   ├── model.py             # Network model definitions.
+│   ├── runs                 # Local directory for training output.
+│   ├── train_cnn.py         # Scripts to train the CVAE/CNN models.
+│   ├── train_cvae.py
+│   └── util.py              # Utility tools for networks.
+├── planning  # ------------ # Package that contains all planners.
+│   ├── baseline_nbvp.py     # Python implementation of RH-NBVP.
+│   ├── baseline_planner.py  # Uniform sampling-based local planner.
+│   ├── global_planner.py    # Frontier-based global planner.
+│   ├── policy_planner.py    # Local planners using our models.
+│   └── rrt_star.py          # RRT* for global path verification.
+└── simulator  # ----------- # Package that contains the simulator.
+    ├── config.py            # Config definition for entire simulator.
+    ├── demo.py              # Example on how to use some interfaces.
+    ├── robot.py             # Code for capabilities of the robot.
+    ├── simulator.py         # Main interface combining all components.
+    └── world.py             # Procedural world generation.
+```
