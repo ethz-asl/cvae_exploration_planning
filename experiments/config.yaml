@@ -1,0 +1,30 @@
+# Worlds to run on.
+worlds: 
+  [
+    'demo_maze',
+  ]
+# Methods to run.
+planners:
+  [
+    'cvae',
+    'uniform',
+    'regression',
+    'nbvp',
+    'cvae_joint',
+    'twostage_predict_gain',
+    'cnn_gain_predict',
+    'cnn_uniform_gain_predict',
+    'uniform_gain_predict'
+  ]
+n_samples: [1, 5]  # Numbers of samples to run for each method.
+n_runs:  5  # Number of runs for each method and samples.
+time_limit: 20  # minutes
+plot: True  # Create a summary plot afterwards.
+
+# Path to pre-trained models.
+path:
+  cvae: "models/cvae.pt"
+  cvae_joint: "models/cvae_joint.pt"
+  gain_estimator: "models/gain_estimator.pt"
+  regression: "models/regression.pt"
+  cnn_gain_estimator: "models/cnn_gain_estimator.pt"

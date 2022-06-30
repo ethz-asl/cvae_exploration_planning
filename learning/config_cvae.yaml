@@ -1,0 +1,18 @@
+cvae:
+  x_dim: 3  # 3: regular CVAE, 4: CVAE+GJ (4th entry is the gain)
+  y_dim: 200
+  y_dim_start: 4
+  dim_in: 203
+  dim_latent: 3
+  dim_hidden: 256
+
+batch_size: 256
+shuffle: True
+num_workers: 2
+
+max_epochs: 2000
+kl_weight: 1
+
+data_path: data/CVAE_dataset.npy # absolute path or relative to repo root.
+
+
