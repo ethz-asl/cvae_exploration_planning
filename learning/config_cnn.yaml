@@ -1,4 +1,4 @@
-max_epochs: 1 #2000
+max_epochs: 2000
 data_path: data/CNN_dataset.npy # absolute path or relative to repo root.
 
 

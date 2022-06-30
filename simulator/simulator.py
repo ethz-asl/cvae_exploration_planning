@@ -126,7 +126,6 @@ class Simulator:
         if not os.path.isfile(filepath + ".p"):
             warnings.warn("Cannot load '%s': is not an existing file!" % filepath + ".p")
             return
-        print(filepath)
         data = pickle.load(open(filepath + ".p", "rb"))
         cfg = self._cfg
         self.__dict__.update(data[0].__dict__)

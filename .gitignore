@@ -59,8 +59,8 @@ Notes.txt
 
 # Data and output directories.
 data/
-outputs/
+results/
 worlds/
 models/
 runs/
-policies/
+tmp.py

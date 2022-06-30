@@ -19,8 +19,6 @@ except RuntimeError:
 REPOSITORY_ROOT = os.path.abspath(
     os.path.join(__file__, os.path.pardir, os.pardir))
 
-    
-
 
 def main():
     print("Setting up CVAE training...")
@@ -75,8 +73,7 @@ def main():
     description = "_kl_" + str(kl_weight) + "_ite_" + str(max_epochs)
     folder = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + description
     writer = SummaryWriter("runs/" + folder)
-    os.makedirs(name="policies", exist_ok=True)
-    os.makedirs(name="policies/" + folder)
+    os.makedirs(name="runs/" + folder, exist_ok=True)
 
     try:
         print("========= start training ============")
@@ -126,18 +123,18 @@ def main():
             # save intermediate model
             if epoch % 2000 == 0 and epoch > 0:
                 print("Saving intermediate model.")
-                save_path = "policies/" + folder + "/" + \
+                save_path = "runs/" + folder + "/" + \
                     datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + "_intermediate.pt"
                 torch.save(model, f=save_path)
 
         # save final model
         print("Finishing training, Saving final model.")
-        save_path = "policies/" + folder + "/final.pt"
+        save_path = "runs/" + folder + "/final.pt"
         torch.save(model, f=save_path)
 
     except KeyboardInterrupt:
         print("Training interrupted, saving final model.")
-        save_path = "policies/" + folder + "/final_interrupted.pt"
+        save_path = "runs/" + folder + "/final_interrupted.pt"
         torch.save(model, f=save_path)
 
     writer.close()

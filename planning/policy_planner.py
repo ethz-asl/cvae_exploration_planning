@@ -25,7 +25,7 @@ class PolicyPlanner:
         self.pooling_stride = 5
         self.dim_latent = 3
         self.local_img_size = 100
-        if self._method == 'twostage_predict_gain' or self._method == 'uniform_predict':
+        if self._method == 'twostage_predict_gain' or self._method == 'uniform_gain_predict':
             self.gain_estimator = gain_estimator
         if self._method == 'cnn_uniform_gain_predict' or self._method == 'cnn_gain_predict':
             self.gain_predictor = gain_estimator
@@ -47,7 +47,7 @@ class PolicyPlanner:
         local_map_zip = one_hot_encoder_map(
             np.repeat([local_map_zip], n_stack, axis=0), self.local_img_size)
         cond = torch.tensor(
-            local_map_zip, dtype=self.dtype, device=self.device)
+            np.array(local_map_zip), dtype=self.dtype, device=self.device)
         return cond
 
     def localmap_downsample(self, ifonehot=False, zipsize=25):
@@ -116,10 +116,8 @@ class PolicyPlanner:
                 if try_counter == self.maximum_try and not valid_point_found:
                     break
 
-        # return best_move, ask_status, time.time() - time_start, resorting_time, valid_point_found, try_counter
-
         ''' Predict the gain together with actions, not evaluate real gain '''
-        if self._method == 'predict_gain':
+        if self._method == 'cvae_joint':
             time_start = time.time()
             cond = self.get_local_condition(1)
             while not valid_point_found or counter < self.n_sample:
@@ -188,7 +186,7 @@ class PolicyPlanner:
                     break
 
         ''' ranomly sampling and use the gain predictor to estimate the gain'''
-        if self._method == 'uniform_predict':
+        if self._method == 'uniform_gain_predict':
             time_start = time.time()
             cond = self.get_local_condition(1)
             while not valid_point_found or counter < self.n_sample:
