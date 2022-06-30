@@ -156,8 +156,7 @@ python demo.py
 
 The demo will first display the complete randomly generated world and start pose. Then enter '1' in the terminal to let the robot explore the simulated world using a bseline planner. If it gets stuck in a local minimum a global planner will reset it.
 
-<img src="https://user-images.githubusercontent.com/36043993/176464541-5bd8f644-889e-4a05-b09b-9d34c9290917.png" width="300">
-<img src="https://user-images.githubusercontent.com/36043993/176465166-5239e217-7d16-4f21-9ca5-380d91a68539.png" width="300">
+![Simulator](https://user-images.githubusercontent.com/36043993/176603370-3dd3727d-7f65-4e35-80ba-f8419fd58516.png)
 Randomly generated world (left) and robot moving around (right, orange to red pose arrows).
 
 To generate different world files for experiments, run the world explorer:
