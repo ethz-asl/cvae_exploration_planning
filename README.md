@@ -1,6 +1,7 @@
 # cvae_exploration_planning
-**CVAE Exploration Planning** is a package providing an open-source implementation of the simulator, networks, and planners presented in our paper on learning sampling-based local exploration.
+**CVAE Exploration Planning** is proposes a new approach to local exploration planning by combining learning and the sampling-based planning paradigm! This package provides an open-source implementation of the simulator, datasets, models, and planners presented in our paper on learning sampling-based local exploration.
 
+![CVAE Exploration Planning](https://user-images.githubusercontent.com/36043993/176672800-24e26425-ae9b-4df9-98f3-70b71d3cd2c7.gif)
 
 # Table of Contents
 **Credits**
@@ -145,6 +146,7 @@ python evaluate.py
 This will run the planners in the simulator for all specified experiments and store the results in `epxeriments/results/<start_time>`. Afterwards the stored data is evaluated and exploration progress curves are plotted.
 
 ![Example_performance](https://user-images.githubusercontent.com/36043993/176662115-fb589d43-242c-4712-8308-962a0d98dae2.png)
+
 Example performance on the demo_maze for N=5.
 
 
@@ -159,6 +161,7 @@ python demo.py
 The demo will first display the complete randomly generated world and start pose. Then enter '1' in the terminal to let the robot explore the simulated world using a bseline planner. If it gets stuck in a local minimum a global planner will reset it.
 
 ![Simulator](https://user-images.githubusercontent.com/36043993/176603370-3dd3727d-7f65-4e35-80ba-f8419fd58516.png)
+
 Randomly generated world (left) and robot moving around (right, orange to red pose arrows).
 
 To generate different world files for experiments, run the world explorer:
