@@ -28,7 +28,7 @@
 ## Paper and Video
 If you find this package useful for your research, please consider citing our paper:
 
-* Lukas Schmid, Chao Ni, Yuliang Zhong, Roland Siegwart, and Olov Andersson, "**Fast and Compute-efficient Sampling-based Local Exploration Planning via Distribution Learning**", in *IEEE Robotics and Automation Letters*, June 2022 [IEEE | [ArXiv](https://arxiv.org/abs/2202.13715) | Video]
+* Lukas Schmid, Chao Ni, Yuliang Zhong, Roland Siegwart, and Olov Andersson, "**Fast and Compute-efficient Sampling-based Local Exploration Planning via Distribution Learning**", in *IEEE Robotics and Automation Letters*, June 2022 [IEEE | [ArXiv](https://arxiv.org/abs/2202.13715) | [Video](https://www.youtube.com/watch?v=Hj5yI8VtlXk)]
   ```bibtex
   @ARTICLE{Schmid22Fast,
     author={L. {Schmid} and C. {Ni} and Y. {Zhong} and and R. {Siegwart} and O. {Andersson}},
