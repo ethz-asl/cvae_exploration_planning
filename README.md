@@ -2,7 +2,7 @@
 **CVAE Exploration Planning** proposes a new approach to local exploration planning by combining learning and the sampling-based planning paradigm! This package provides an open-source implementation of the simulator, datasets, models, and planners presented in our paper on learning sampling-based local exploration.
 
 <p align="center">
-  <img width="1000" src="https://user-images.githubusercontent.com/36043993/176672800-24e26425-ae9b-4df9-98f3-70b71d3cd2c7.gif">
+  <img width="100%" src="https://user-images.githubusercontent.com/36043993/176672800-24e26425-ae9b-4df9-98f3-70b71d3cd2c7.gif">
 </p>
 
 # Table of Contents
