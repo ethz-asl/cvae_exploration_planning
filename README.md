@@ -41,6 +41,10 @@ If you find this package useful for your research, please consider citing our pa
   }
   ```
   
+For a short overview of our approach check out our video on youtube:
+
+[<img src="[https://user-images.githubusercontent.com/36043993/122600300-db0de400-d06f-11eb-838b-1a505b430f60.jpg](https://user-images.githubusercontent.com/36043993/191530807-1432b5c9-318a-4028-aedf-2b9cd5c82322.png)" alt="youtube video">]([https://www.youtube.com/watch?v=WInjZvoCDCM](https://www.youtube.com/watch?v=Hj5yI8VtlXk))
+  
 # Setup
 We recommend using a virtual environment to run this project. We provide setup instructions using [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html) on Ubuntu.
 
