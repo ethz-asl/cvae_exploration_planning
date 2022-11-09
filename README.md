@@ -31,6 +31,7 @@ If you find this package useful for your research, please consider citing our pa
 * Lukas Schmid, Chao Ni, Yuliang Zhong, Roland Siegwart, and Olov Andersson, "**Fast and Compute-efficient Sampling-based Local Exploration Planning via Distribution Learning**", in *IEEE Robotics and Automation Letters*, vol. 7, no. 3, pp. 7810-7817, July 2022 [ [IEEE](https://ieeexplore.ieee.org/document/9807401) | [ArXiv](https://arxiv.org/abs/2202.13715) | [Video](https://www.youtube.com/watch?v=Hj5yI8VtlXk) | [Project Page](https://chaofiber.github.io/cvae_exploration_planning/) ]
   ```bibtex
   @ARTICLE{Schmid22Fast,
+    title={Fast and Compute-efficient Sampling-based Local Exploration Planning via Distribution Learning},
     author={L. {Schmid} and C. {Ni} and Y. {Zhong} and and R. {Siegwart} and O. {Andersson}},
     journal={IEEE Robotics and Automation Letters},
     year={2022},
